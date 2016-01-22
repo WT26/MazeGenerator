@@ -52,8 +52,8 @@ vector<string> change_row_connections(vector<string>maze, int size_x, int size_y
 
         for(int indeksi{1}; indeksi != size_x-1; indeksi++){
 
-            if (maze[i][indeksi]){
-
+            if (maze[i][indeksi] == ""){
+                
             }
             maze[i][indeksi] = maze[i][indeksi]
 
