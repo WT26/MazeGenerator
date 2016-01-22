@@ -17,7 +17,7 @@ void maze_generator(int size_x, int size_y)
         string row = "#";
 
         for(int index{0}; index != size_x-2; index++){
-            if(rand()%100 > 85){ row += " "; }   else{ row += "#"; }
+            if(rand()%100 > 90){ row += " "; }   else{ row += "#"; }
         }
 
         maze.push_back(row += "#");
@@ -25,7 +25,10 @@ void maze_generator(int size_x, int size_y)
     // Creates last row, -26 is not acceptable position of x so its fully blocked
     maze.push_back(create_entrance_row(-26, size_x));
 
+    print_maze(size_x, size_y, maze);
+    cout<<"\n\n\n";
     maze = change_row_connections(maze, size_x, size_y);
+    maze = change_line_connections(maze, size_x, size_y);
 
     print_maze(size_x, size_y, maze);
 
@@ -49,14 +52,36 @@ string create_entrance_row(int place_of_entrance, int size_x){
 
 vector<string> change_row_connections(vector<string>maze, int size_x, int size_y){
     for(int i{1}; i != size_y; i++){
-
         for(int indeksi{1}; indeksi != size_x-1; indeksi++){
 
-            if (maze[i][indeksi]){
-
+            if (maze[i][indeksi] == ' ' && indeksi+1 != size_x && rand()%100 > 30) {
+                const char empty = ' ';
+                maze[i][indeksi+1] = empty;
             }
-            maze[i][indeksi] = maze[i][indeksi]
 
         }
     }
+    return maze;
 }
+
+vector<string> change_line_connections(vector<string>maze, int size_x, int size_y){
+    for(int i{1}; i != size_y; i++){
+        for(int indeksi{1}; indeksi != size_x-1; indeksi++){
+
+            if (maze[i][indeksi] == ' ' && i != size_y && rand()%100 > 30) {
+                const char empty = ' ';
+                for(int number{0}; number != 4; number++){
+                    //cout<<"number:"<<number<<"  i:"<<i<<"  indeksi:"<<indeksi;
+                    if (i != size_y - number && rand()%100 >50){
+                        //maze[i-1-number][indeksi] = empty;
+                    }
+                    else{
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return maze;
+}
+
