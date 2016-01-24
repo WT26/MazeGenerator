@@ -90,3 +90,7 @@ vector<string> change_line_connections(vector<string>maze, int size_x, int size_
     return maze;
 }
 
+
+vector<string> delete_open_areas(vector<string> maze, int size_x, int size_y){
+    //todo Delete areas where spot your inspecting has 8/8 surrounding pieces empty too.
+}
