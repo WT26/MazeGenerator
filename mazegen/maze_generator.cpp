@@ -28,7 +28,12 @@ void maze_generator(int size_x, int size_y)
     print_maze(size_x, size_y, maze);
     cout<<"\n\n\n";
     maze = change_row_connections(maze, size_x, size_y);
+    print_maze(size_x, size_y, maze);
+    cout<<"\n\n\n";
+
+
     maze = change_line_connections(maze, size_x, size_y);
+
 
     print_maze(size_x, size_y, maze);
 
@@ -51,15 +56,15 @@ string create_entrance_row(int place_of_entrance, int size_x){
 }
 
 vector<string> change_row_connections(vector<string>maze, int size_x, int size_y){
-    for(int i{1}; i != size_y; i++){
+    for(int i{1}; i <= size_y; i++){
         for(int indeksi{1}; indeksi != size_x-1; indeksi++){
 
-            if (maze[i][indeksi] == ' ' && indeksi+1 != size_x && rand()%100 > 30) {
+            if (maze[i][indeksi] == ' ' && indeksi+1 != size_x-1 && rand()%100 > 30) {
                 const char empty = ' ';
                 maze[i][indeksi+1] = empty;
             }
-
         }
+        i++;
     }
     return maze;
 }
@@ -70,10 +75,10 @@ vector<string> change_line_connections(vector<string>maze, int size_x, int size_
 
             if (maze[i][indeksi] == ' ' && i != size_y && rand()%100 > 30) {
                 const char empty = ' ';
-                for(int number{0}; number != 4; number++){
-                    //cout<<"number:"<<number<<"  i:"<<i<<"  indeksi:"<<indeksi;
-                    if (i != size_y - number && rand()%100 >50){
-                        //maze[i-1-number][indeksi] = empty;
+                for(int number{0}; number != 6; number++){
+                    cout<<"number:"<<number<<"  i:"<<i<<"  indeksi:"<<indeksi<<"\n";
+                    if (i != size_y - number  && rand()%100 >50 && i-number != 0){
+                        maze[i-number][indeksi] = empty;
                     }
                     else{
                         break;
