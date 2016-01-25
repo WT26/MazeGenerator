@@ -25,25 +25,25 @@ void maze_generator(int size_x, int size_y)
     // Creates last row, -26 is not acceptable position of x so its fully blocked
     maze.push_back(create_entrance_row(-26, size_x));
 
-    print_maze(size_x, size_y, maze);
-    cout<<"\n\n\n";
-    maze = change_row_connections(maze, size_x, size_y);
-    print_maze(size_x, size_y, maze);
-    cout<<"\n\n\n";
+    int generation{1};
+    print_maze(size_x, size_y, maze, generation);
 
-
-    maze = change_line_connections(maze, size_x, size_y);
-
-
-    print_maze(size_x, size_y, maze);
-
+    for(int i{0}; i != 10; i++){
+        maze = change_row_connections(maze, size_x, size_y);
+        maze = change_line_connections(maze, size_x, size_y);
+        maze = delete_open_areas(maze, size_x, size_y);
+        generation++;
+        print_maze(size_x, size_y, maze, generation);
+    }
 }
 
-void print_maze(int x, int y, vector<string> maze){
+void print_maze(int x, int y, vector<string> maze, int generation){
+    cout<<"Generation: "<<generation<<"\n";
     for (int i{0}; i != y; i++){
         cout << maze[i];
         cout<<"\n";
     }
+    cout<<"\n\n\n";
 }
 
 string create_entrance_row(int place_of_entrance, int size_x){
@@ -60,11 +60,12 @@ vector<string> change_row_connections(vector<string>maze, int size_x, int size_y
         for(int indeksi{1}; indeksi != size_x-1; indeksi++){
 
             if (maze[i][indeksi] == ' ' && indeksi+1 != size_x-1 && rand()%100 > 30) {
-                const char empty = ' ';
-                maze[i][indeksi+1] = empty;
+                maze[i][indeksi+1] = ' ';
             }
         }
-        i++;
+        if(i != size_y - 1){
+            i++;
+        }
     }
     return maze;
 }
@@ -74,11 +75,9 @@ vector<string> change_line_connections(vector<string>maze, int size_x, int size_
         for(int indeksi{1}; indeksi != size_x-1; indeksi++){
 
             if (maze[i][indeksi] == ' ' && i != size_y && rand()%100 > 30) {
-                const char empty = ' ';
                 for(int number{0}; number != 6; number++){
-                    cout<<"number:"<<number<<"  i:"<<i<<"  indeksi:"<<indeksi<<"\n";
                     if (i != size_y - number  && rand()%100 >50 && i-number != 0){
-                        maze[i-number][indeksi] = empty;
+                        maze[i-number][indeksi] = ' ';
                     }
                     else{
                         break;
@@ -93,4 +92,40 @@ vector<string> change_line_connections(vector<string>maze, int size_x, int size_
 
 vector<string> delete_open_areas(vector<string> maze, int size_x, int size_y){
     //todo Delete areas where spot your inspecting has 8/8 surrounding pieces empty too.
+
+    for(int i{1}; i != size_y; i++){
+        for(int indeksi{1}; indeksi != size_x-1; indeksi++){
+
+            if (surrounding_pieces_open(maze, indeksi, i)) {
+                maze[i][indeksi] = '#';
+                if(rand()%100 >50){
+                    int number_of_side = rand()%3;
+                    if(number_of_side == 0){
+                        maze[i-1][indeksi] = '#';
+                    }
+                    else if(number_of_side == 1){
+                        maze[i+1][indeksi] = '#';
+                    }
+                    else if(number_of_side == 2){
+                        maze[i][indeksi - 1] = '#';
+                    }
+                    else if(number_of_side == 3){
+                        maze[i][indeksi + 1] = '#';
+                    }
+                }
+            }
+        }
+    }
+    return maze;
+}
+
+bool surrounding_pieces_open(vector<string> maze, int location_x, int location_y){
+    if(maze[location_y][location_x] == ' ' && maze[location_y][location_x - 1] == ' ' && maze[location_y][location_x + 1] == ' ' &&
+            maze[location_y - 1][location_x] == ' ' && maze[location_y - 1][location_x - 1] == ' ' && maze[location_y - 1][location_x + 1] == ' ' &&
+            maze[location_y + 1][location_x] == ' ' && maze[location_y + 1][location_x - 1] == ' ' && maze[location_y + 1][location_x + 1] == ' '){
+            return true;
+    }
+    else {
+        return false;
+    }
 }
