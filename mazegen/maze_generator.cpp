@@ -203,10 +203,12 @@ vector<coordinates> coords_under_inspection(vector<string> maze, int current_x, 
             under_inspection.push_back(temp_coordinate);
         }
     }
+    return under_inspection;
 }
 
 
 int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, vector<coordinates> already_checked, int tunnel_sofar){
+    print_maze(20, 20, maze, 26, 0);
     vector<coordinates> under_inspection;
     coordinates first_coords;
     first_coords.x = current_x;
@@ -215,13 +217,21 @@ int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, ve
 
     while(under_inspection.size() != 0){
         under_inspection = coords_under_inspection(maze, current_x, current_y, already_checked, under_inspection);
-        cout<<"or h44242ere"<<endl;
 
         coordinates new_coordinate;
         new_coordinate.x = current_x;
         new_coordinate.y = current_y;
         already_checked.push_back(new_coordinate);
 
+        cout<<"underinspection x at starts: "<<under_inspection[0].x<<"\n";
+
+        int counter{0};
+        for (auto coordinate : under_inspection){
+            if(coordinate.x == current_x && coordinate.y == current_y){
+                under_inspection.erase(under_inspection.begin() + counter);
+            }
+            counter++;
+        }
         current_x = under_inspection[0].x;
         current_y = under_inspection[0].y;
 
