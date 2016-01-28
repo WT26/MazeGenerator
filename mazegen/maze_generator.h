@@ -21,6 +21,7 @@ string create_entrance_row(int place_of_entrance, int size_x);
 vector<string> change_row_connections(vector<string>maze, int size_x, int size_y);
 vector<string> change_line_connections(vector<string>maze, int size_x, int size_y);
 vector<string> delete_open_areas(vector<string> maze, int size_x, int size_y);
+vector<string> delete_loops(vector<string> maze, int size_x, int size_y);
 
 vector<coordinates> coords_under_inspection(vector<string> maze, int current_x, int current_y, vector<coordinates> already_checked, vector<coordinates> under_inspection);
 
