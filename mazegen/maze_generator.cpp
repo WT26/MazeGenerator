@@ -12,7 +12,11 @@ void maze_generator(int size_x, int size_y)
 
     srand (time(NULL));
     vector<string> maze;
-    int place_of_entrance = rand()%size_x; if (place_of_entrance == size_x){ place_of_entrance -= 1; };
+    int place_of_entrance = rand()%size_x;
+
+    if (place_of_entrance == size_x){ place_of_entrance -= 1;}
+    else if(place_of_entrance == 0){ place_of_entrance = 1; }
+
     maze.push_back(create_entrance_row(place_of_entrance, size_x));
 
     for(int i{0}; i != size_y-2; i++){
@@ -33,6 +37,7 @@ void maze_generator(int size_x, int size_y)
     print_maze(size_x, size_y, maze, generation, tunnel_length);
 
     for(int i{0}; i != 10; i++){
+        tunnel_length = 0;
         maze = change_row_connections(maze, size_x, size_y);
         maze = change_line_connections(maze, size_x, size_y);
         maze = delete_open_areas(maze, size_x, size_y);
@@ -233,7 +238,6 @@ vector<coordinates> coords_under_inspection(vector<string> maze, int current_x, 
 
 
 int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, vector<coordinates> already_checked, int tunnel_sofar){
-    print_maze(20, 20, maze, 26, 0);
     vector<coordinates> under_inspection;
     coordinates first_coords;
     first_coords.x = current_x;
