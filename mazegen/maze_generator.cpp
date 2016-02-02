@@ -154,7 +154,7 @@ bool vertical_loops_exists(vector<string> maze, int location_x, int location_y){
     if(maze[location_y][location_x] == '#' && maze[location_y][location_x - 1] == ' ' && maze[location_y][location_x + 1] == ' ' && maze[location_y - 2][location_x] == '#' &&
             maze[location_y - 1][location_x] == ' ' && maze[location_y - 1][location_x - 1] == ' ' && maze[location_y - 1][location_x + 1] == ' ' &&
             maze[location_y + 1][location_x] == ' ' && maze[location_y + 1][location_x - 1] == ' ' && maze[location_y + 1][location_x + 1] == ' '){
-            return true;
+        return true;
     }
     else {
         return false;
@@ -242,7 +242,6 @@ int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, ve
 
     while(under_inspection.size() != 0){
         under_inspection = coords_under_inspection(maze, current_x, current_y, already_checked, under_inspection);
-
         coordinates new_coordinate;
         new_coordinate.x = current_x;
         new_coordinate.y = current_y;
@@ -250,8 +249,10 @@ int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, ve
 
         int counter{0};
         for (auto coordinate : under_inspection){
-            if(coordinate.x == current_x && coordinate.y == current_y){
+            if(coordinate.x == current_x && coordinate.y == current_y){                
                 under_inspection.erase(under_inspection.begin() + counter);
+                break;
+
             }
             counter++;
         }
@@ -265,9 +266,8 @@ int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, ve
 
 
 vector<string> delete_loops(vector<string> maze, int size_x, int size_y){
-    for(int i{1}; i != size_y; i++){
+    for(int i{2}; i != size_y; i++){
         for(int indeksi{1}; indeksi != size_x-1; indeksi++){
-
             if (sideway_loops_exists(maze, indeksi, i)) {
                 maze[i][indeksi + 1] = '#';
             }
