@@ -42,7 +42,7 @@ void maze_generator(int size_x, int size_y)
         maze = change_line_connections(maze, size_x, size_y);
         maze = delete_open_areas(maze, size_x, size_y);
         maze = delete_loops(maze, size_x, size_y);
-        tunnel_length = how_long_is_the_tunnel(maze, place_of_entrance + 1, 0, already_checked, 0);
+        tunnel_length = how_long_is_the_tunnel(maze, place_of_entrance + 1, 0, already_checked);
         generation++;
         print_maze(size_x, size_y, maze, generation, tunnel_length);
     }
@@ -166,6 +166,10 @@ bool vertical_loops_exists(vector<string> maze, int location_x, int location_y){
     }
 }
 
+bool block_exists(vector<string> maze, int location_x, int location_y){
+
+}
+
 vector<coordinates> coords_under_inspection(vector<string> maze, int current_x, int current_y, vector<coordinates> already_checked, vector<coordinates> under_inspection){
     // Left is empty.
     if(maze[current_y][current_x - 1] == ' '){
@@ -237,31 +241,36 @@ vector<coordinates> coords_under_inspection(vector<string> maze, int current_x, 
 }
 
 
-int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, vector<coordinates> already_checked, int tunnel_sofar){
+int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, vector<coordinates> already_checked){
     vector<coordinates> under_inspection;
     coordinates first_coords;
     first_coords.x = current_x;
     first_coords.y = current_y;
     under_inspection.push_back(first_coords);
+    int tunnel_sofar{0};
 
     while(under_inspection.size() != 0){
-        under_inspection = coords_under_inspection(maze, current_x, current_y, already_checked, under_inspection);
         coordinates new_coordinate;
         new_coordinate.x = current_x;
         new_coordinate.y = current_y;
         already_checked.push_back(new_coordinate);
+        under_inspection = coords_under_inspection(maze, current_x, current_y, already_checked, under_inspection);
 
         int counter{0};
         for (auto coordinate : under_inspection){
             if(coordinate.x == current_x && coordinate.y == current_y){                
                 under_inspection.erase(under_inspection.begin() + counter);
                 break;
-
             }
             counter++;
         }
         current_x = under_inspection[0].x;
         current_y = under_inspection[0].y;
+        //cout<<current_x<<"<-x    y->"<<current_y<< "\n";
+
+        for(auto coords : already_checked){
+            cout<<coords.x<<"<x   y>"<<coords.y<<"\n";
+        }
 
         tunnel_sofar++;
     }
@@ -276,7 +285,21 @@ vector<string> delete_loops(vector<string> maze, int size_x, int size_y){
                 maze[i][indeksi + 1] = '#';
             }
             if(vertical_loops_exists(maze, indeksi, i)){
-                maze[i][indeksi + 1] = '#';
+                maze[i][indeksi] = '#';
+            }
+        }
+    }
+    return maze;
+}
+
+vector<string> delete_blocks(vector<string> maze, int size_x, int size_y){
+    for(int i{2}; i != size_y; i++){
+        for(int indeksi{1}; indeksi != size_x-1; indeksi++){
+            if (sideway_blocks_exists(maze, indeksi, i)) {
+                maze[i][indeksi + 1] = ' ';
+            }
+            if(vertical_loops_exists(maze, indeksi, i)){
+                maze[i + 1][indeksi] = ' ';
             }
         }
     }

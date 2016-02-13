@@ -27,6 +27,6 @@ vector<coordinates> coords_under_inspection(vector<string> maze, int current_x, 
 
 bool surrounding_pieces_open(vector<string> maze, int location_x, int location_y);
 
-int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, vector<coordinates> already_checked, int tunnel_sofar);
+int how_long_is_the_tunnel(vector<string> maze, int current_x, int current_y, vector<coordinates> already_checked);
 
 #endif // MAZE_GENERATOR_H
