@@ -1,2 +1,2 @@
 # MazeGenerator
-Generates simple mazes
+Generates simple mazes, with simple functions.
